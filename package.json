@@ -1,6 +1,6 @@
 {
     "name": "@stadtteilliebe/react-cookie-consent",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "small react library to manage cookie consent",
     "author": "Martin Kolitsch (mrt-stl)",
     "main": "./dist/cjs/index.js",
