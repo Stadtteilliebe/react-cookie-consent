@@ -1,5 +1,6 @@
 /// <reference types="react" />
-type Props = {
+declare type Props = {
+    closeBanner: any;
     title?: string;
     content?: string;
     services: {
@@ -9,5 +10,5 @@ type Props = {
         category: string;
     }[];
 };
-declare function Banner({ title, content, services }: Props): JSX.Element;
+declare function Banner({ closeBanner, title, content, services }: Props): JSX.Element;
 export default Banner;

@@ -1,2 +1,4 @@
 import Banner from "./components/Banner";
-export { Banner };
+import CookieConsent from "./components/CookieConsent";
+import { showUi } from "./lib/showUi";
+export { Banner, CookieConsent, showUi };

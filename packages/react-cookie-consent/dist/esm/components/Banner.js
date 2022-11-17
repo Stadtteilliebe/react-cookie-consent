@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/prefer-as-const */
 import React from "react";
+import { setLS } from "../lib/ls";
 var STYLES = {
     container: {
         // somehow ts troughs an error here
@@ -19,11 +21,12 @@ var STYLES = {
     }
 };
 function Banner(_a) {
-    var title = _a.title, content = _a.content, services = _a.services;
+    var closeBanner = _a.closeBanner, title = _a.title, content = _a.content, services = _a.services;
     // const [consent, setConsent] = React.useState()
     var handleSubmit = function (e) {
         e.preventDefault();
-        console.log("submit");
+        setLS("user-consent", true);
+        return closeBanner(false);
     };
     var handleChange = function (e) {
         console.group(e);
@@ -32,13 +35,14 @@ function Banner(_a) {
         React.createElement("h2", null, title),
         React.createElement("p", null, content),
         React.createElement("form", { onSubmit: handleSubmit },
-            services.map(function (serv) { return (React.createElement(React.Fragment, null,
+            services.map(function (serv, index) { return (React.createElement("div", { key: index },
                 React.createElement("h3", null, serv.title),
                 React.createElement("details", null,
                     React.createElement("summary", null, "Mehr erfahren"),
                     serv.description),
                 React.createElement("input", { type: 'checkbox', "data-id": serv.id, onChange: handleChange }))); }),
-            React.createElement("button", { type: 'submit' }, "Speichern"))));
+            React.createElement("button", { type: 'submit' }, "Speichern"),
+            React.createElement("button", { onClick: function () { return closeBanner(false); } }, "Schlie\u00DFen"))));
 }
 export default Banner;
 //# sourceMappingURL=Banner.js.map

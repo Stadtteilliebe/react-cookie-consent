@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/prefer-as-const */
 import React from "react"
+import { setLS } from "../lib/ls"
 
 type Props = {
+    closeBanner: any
     title?: string
     content?: string
     services: { id: string; title: string; description: string; category: string }[]
@@ -27,11 +30,12 @@ const STYLES = {
     },
 }
 
-function Banner({ title, content, services }: Props) {
+function Banner({ closeBanner, title, content, services }: Props) {
     // const [consent, setConsent] = React.useState()
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault()
-        console.log("submit")
+        setLS("user-consent", true)
+        return closeBanner(false)
     }
     const handleChange = (e: React.SyntheticEvent) => {
         console.group(e)
@@ -41,17 +45,18 @@ function Banner({ title, content, services }: Props) {
             <h2>{title}</h2>
             <p>{content}</p>
             <form onSubmit={handleSubmit}>
-                {services.map((serv) => (
-                    <>
+                {services.map((serv, index) => (
+                    <div key={index}>
                         <h3>{serv.title}</h3>
                         <details>
                             <summary>Mehr erfahren</summary>
                             {serv.description}
                         </details>
-                        <input type='checkbox' data-id={serv.id} onChange={handleChange}/>
-                    </>
+                        <input type='checkbox' data-id={serv.id} onChange={handleChange} />
+                    </div>
                 ))}
                 <button type='submit'>Speichern</button>
+                <button onClick={() => closeBanner(false)}>Schließen</button>
             </form>
         </div>
     )

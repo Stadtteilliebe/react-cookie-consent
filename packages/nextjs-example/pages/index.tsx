@@ -1,34 +1,7 @@
-import { Banner } from "@stadtteilliebe/react-cookie-consent"
+import { showUi } from "@stadtteilliebe/react-cookie-consent"
 import Head from "next/head"
-import Image from "next/image"
 
 export default function Home() {
-    const services = [
-        {
-            id: "ga",
-            title: "Google Analytics",
-            description: "Das macht was mit dir",
-            category: "Marketing",
-        },
-        {
-            id: "fb",
-            title: "Facebook",
-            description: "Das macht auch was mit dir",
-            category: "Marketing",
-        },
-        {
-            id: "linkedin",
-            title: "LinkedIn",
-            description: "Das macht was mit dir",
-            category: "Marketing",
-        },
-        {
-            id: "prismic",
-            title: "Prismic",
-            description: "Das macht was mit dir",
-            category: "Essentiel",
-        },
-    ]
     return (
         <div>
             <Head>
@@ -37,26 +10,47 @@ export default function Home() {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
 
-            <main>
-                <Banner
-                    // @ts-ignore - don't know why this happens
-                    title="Cookie Consent"
-                    content="Uns ist Datenschutz wichtig"
-                    services={services}
-                />
+            <main style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+                <div
+                    style={{
+                        width: "calc(50% - 50px)",
+                        height: "500px",
+                        background: "#cfbb0c",
+                        margin: "25px",
+                        boxSizing: "border-box",
+                    }}
+                ></div>
+                <div
+                    style={{
+                        width: "calc(50% - 50px)",
+                        height: "500px",
+                        background: "#6416ac",
+                        margin: "25px",
+                        boxSizing: "border-box",
+                    }}
+                ></div>
+                <div
+                    style={{
+                        width: "calc(50% - 50px)",
+                        height: "500px",
+                        background: "#ac1682",
+                        margin: "25px",
+                        boxSizing: "border-box",
+                    }}
+                ></div>
+                <div
+                    style={{
+                        width: "calc(50% - 50px)",
+                        height: "500px",
+                        background: "#eb9730",
+                        margin: "25px",
+                        boxSizing: "border-box",
+                    }}
+                ></div>
             </main>
 
             <footer>
-                <a
-                    href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Powered by{" "}
-                    <span>
-                        <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-                    </span>
-                </a>
+                <button onClick={showUi}>Cookie-Einstellungen</button>
             </footer>
         </div>
     )
