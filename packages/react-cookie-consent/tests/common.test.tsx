@@ -3,7 +3,7 @@ import { render } from "@testing-library/react"
 
 import "jest-canvas-mock"
 
-import { Banner } from "../src"
+import { CookieConsent } from "../src"
 
 const SERVICES = [
     {
@@ -34,13 +34,6 @@ const SERVICES = [
 
 describe("Common render", () => {
     it("renders without crashing", () => {
-        render(
-            <Banner
-                services={SERVICES}
-                closeBanner={() => {
-                    return null
-                }}
-            />,
-        )
+        render(<CookieConsent services={SERVICES} />)
     })
 })

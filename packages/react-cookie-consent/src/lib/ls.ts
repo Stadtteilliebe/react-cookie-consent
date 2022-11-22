@@ -1,9 +1,16 @@
 const getLS = (name: "user-consent") => {
-    return localStorage.getItem(name)
+    if (typeof window !== "undefined") {
+        const ls = localStorage.getItem(name)
+        return ls ? JSON.parse(ls) : false
+    }
+    return false
 }
 
 const setLS = (name: "user-consent", data: any) => {
-    return localStorage.setItem(name, JSON.stringify(data))
+    if (typeof window !== "undefined") {
+        return localStorage.setItem(name, JSON.stringify(data))
+    }
+    return false
 }
 
 export { getLS, setLS }

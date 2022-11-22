@@ -1,63 +1,74 @@
 /* eslint-disable @typescript-eslint/prefer-as-const */
 import React from "react"
+import { checkDomScripts } from "../lib/dom"
 import { setLS } from "../lib/ls"
+import ListElement from "./ListElement"
 
 type Props = {
     closeBanner: any
     title?: string
     content?: string
     services: { id: string; title: string; description: string; category: string }[]
+    initialConsent: State
 }
 
-const STYLES = {
-    container: {
-        // somehow ts troughs an error here
-        position: "fixed" as "fixed",
-        boxSizing: "border-box" as "border-box",
-        overflowY: "auto" as "auto",
-        top: 0,
-        bottom: 0,
-        right: 0,
-        left: 0,
-        margin: "auto auto",
-        width: "min(90vw, 400px)",
-        height: "min(600px, 80vh)",
-        background: "white",
-        boxShadow:
-            "0px 0px 2.2px rgba(0, 0, 0, 0.02),  0px 0px 5.3px rgba(0, 0, 0, 0.028),  0px 0px 10px rgba(0, 0, 0, 0.035),  0px 0px 17.9px rgba(0, 0, 0, 0.042),  0px 0px 33.4px rgba(0, 0, 0, 0.05),  0px 0px 80px rgba(0, 0, 0, 0.07)",
-        borderRadius: "5px",
-        padding: "10px 20px",
-    },
-}
+type State = { servicesConsent: { id: string; active: boolean }[] }
 
-function Banner({ closeBanner, title, content, services }: Props) {
-    // const [consent, setConsent] = React.useState()
+function Banner({ closeBanner, title, content, services, initialConsent }: Props) {
+    const [consent, setConsent] = React.useState<State>(initialConsent)
+
+    React.useEffect(() => {
+        if (initialConsent) {
+            return
+        } else {
+            const initialState = services.map((el) => ({ id: el.id, active: false }))
+            setConsent({ servicesConsent: initialState })
+        }
+    }, [initialConsent, services])
+
     const handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault()
-        setLS("user-consent", true)
+        setLS("user-consent", { ...consent, timestamp: new Date() })
+        checkDomScripts(consent.servicesConsent)
         return closeBanner(false)
     }
-    const handleChange = (e: React.SyntheticEvent) => {
-        console.group(e)
+
+    const getServIndex = (id: string) => {
+        return consent.servicesConsent.findIndex((el) => el.id === id)
+    }
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        // @ts-ignore - TODO: type attributes
+        const serviceId = e.target.attributes["data-id"].value
+        const checked = e.target.checked
+        const index = getServIndex(serviceId)
+        const updateConsent = consent
+        updateConsent.servicesConsent[index].active = checked
+        setConsent(updateConsent)
     }
     return (
-        <div style={STYLES.container}>
-            <h2>{title}</h2>
-            <p>{content}</p>
-            <form onSubmit={handleSubmit}>
-                {services.map((serv, index) => (
-                    <div key={index}>
-                        <h3>{serv.title}</h3>
-                        <details>
-                            <summary>Mehr erfahren</summary>
-                            {serv.description}
-                        </details>
-                        <input type='checkbox' data-id={serv.id} onChange={handleChange} />
-                    </div>
-                ))}
-                <button type='submit'>Speichern</button>
-                <button onClick={() => closeBanner(false)}>Schließen</button>
-            </form>
+        <div className="background">
+            <div className="container">
+                <h2>{title}</h2>
+                <p>{content}</p>
+                <form onSubmit={handleSubmit}>
+                    {services.map((serv, index) => (
+                        <div key={index}>
+                            <ListElement
+                                serv={serv}
+                                handleChange={handleChange}
+                                defaultChecked={
+                                    consent.servicesConsent
+                                        ? consent.servicesConsent[getServIndex(serv.id)].active
+                                        : false
+                                }
+                            />
+                        </div>
+                    ))}
+                    <button type="submit">Speichern</button>
+                    <button onClick={() => closeBanner(false)}>Schließen</button>
+                </form>
+            </div>
         </div>
     )
 }
